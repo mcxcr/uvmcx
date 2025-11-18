@@ -1,0 +1,19 @@
+[project]
+name = "uv-mcx"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "Django==6.0a1",
+    "django-environ==0.12.0",
+    "django-extensions==4.1",
+    "djangorestframework==3.16.1",
+    "django-allauth[socialaccount]==65.11.2",
+    "django-allauth[mfa]==65.11.2",
+    "pillow==11.3.0",
+    "django-browser-reload==1.21.0",
+    "django-silk==5.4.3",
+    "flake8==7.3.0",
+    "requests",
+]

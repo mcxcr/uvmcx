@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-appdb}
+      POSTGRES_USER: ${POSTGRES_USER:-appuser}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-apppass}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - .:/app:cached
+      - web_static:/vol/web/static
+      - web_media:/vol/web/media
+    ports:
+      - "8007:8005"
+    command: > # Overrides whatever is in dockerfile
+      sh -c "uv run python app/manage.py runserver 0.0.0.0:8005"
+
+    depends_on:
+      db:
+        condition: service_started
+
+volumes:
+  pgdata:
+  web_static:
+  web_media:
